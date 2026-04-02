@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>OOP Dart Versi Web</title>
+</head>
+<body>
+  <h2>Hasil Output OOP</h2>
+  <pre id="output"></pre>
+
+  <script>
+    let out = "";
+
+    function print(text) {
+      out += text + "\n";
+      document.getElementById("output").textContent = out;
+    }
+
+    // =========================
+    // 1. Polimorfisme
+    // =========================
+    class Bentuk {
+      gambar() {
+        print("Menggambar bentuk");
+      }
+    }
+
+    class Lingkaran extends Bentuk {
+      gambar() {
+        print("Menggambar lingkaran");
+      }
+    }
+
+    class Persegi extends Bentuk {
+      gambar() {
+        print("Menggambar persegi");
+      }
+    }
+
+    let bentuk1 = new Lingkaran();
+    let bentuk2 = new Persegi();
+
+    bentuk1.gambar();
+    bentuk2.gambar();
+
+    // =========================
+    // 2. Casting (simulasi JS)
+    // =========================
+    class Kendaraan {}
+    class Mobil extends Kendaraan {
+      klakson() {
+        print("Tin!");
+      }
+    }
+
+    let k = new Mobil();
+
+    if (k instanceof Mobil) {
+      k.klakson();
+    }
+
+    // =========================
+    // 3. Abstract (simulasi)
+    // =========================
+    class KendaraanAbstract {
+      start() {
+        throw new Error("Method harus diimplementasi!");
+      }
+
+      stop() {
+        print("Kendaraan berhenti");
+      }
+    }
+
+    class Mobil2 extends KendaraanAbstract {
+      constructor(merk) {
+        super();
+        this.merk = merk;
+      }
+
+      start() {
+        print("Mobil " + this.merk + " menyala");
+      }
+    }
+
+    let m = new Mobil2("Toyota");
+    m.start();
+    m.stop();
+
+    // =========================
+    // 4. Interface (simulasi)
+    // =========================
+    class Bird {
+      terbang() {
+        print("Burung terbang tinggi");
+      }
+    }
+
+    class Plane {
+      terbang() {
+        print("Pesawat terbang cepat");
+      }
+    }
+
+    new Bird().terbang();
+    new Plane().terbang();
+
+    // =========================
+    // 5. Static
+    // =========================
+    class MathUtils {
+      static pi = 3.14;
+
+      static add(x, y) {
+        return x + y;
+      }
+    }
+
+    print("Nilai pi: " + MathUtils.pi);
+    print("Hasil: " + MathUtils.add(10, 20));
+
+    // =========================
+    // 6. Challenge (Luas & Keliling)
+    // =========================
+    class Bentuk2 {
+      hitungLuas() {
+        throw new Error("Harus diisi!");
+      }
+
+      hitungKeliling() {
+        throw new Error("Harus diisi!");
+      }
+    }
+
+    class Persegi2 extends Bentuk2 {
+      constructor(sisi) {
+        super();
+        this.sisi = sisi;
+      }
+
+      hitungLuas() {
+        return this.sisi * this.sisi;
+      }
+
+      hitungKeliling() {
+        return 4 * this.sisi;
+      }
+    }
+
+    class Lingkaran2 extends Bentuk2 {
+      constructor(r) {
+        super();
+        this.r = r;
+      }
+
+      hitungLuas() {
+        return 3.14 * this.r * this.r;
+      }
+
+      hitungKeliling() {
+        return 2 * 3.14 * this.r;
+      }
+    }
+
+    let p = new Persegi2(4);
+    let l = new Lingkaran2(7);
+
+    print("Persegi -> Luas: " + p.hitungLuas() + ", Keliling: " + p.hitungKeliling());
+    print("Lingkaran -> Luas: " + l.hitungLuas() + ", Keliling: " + l.hitungKeliling());
+
+  </script>
+</body>
+</html>
