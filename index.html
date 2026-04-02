@@ -186,56 +186,50 @@
 <div class="leaves"></div>
 
 <header>
-  <h1>OOP DART REPORT</h1>
+  <h1>Polimorfisme dan Abstraksi</h1>
   <p>Marsya Dwi Lintang | 251410028 | SI2A</p>
 </header>
 
 <div class="container">
 
   <section>
-    <h2>01. Pengertian OOP</h2>
+    <h2>01. Pengertian Polimorfisme</h2>
     <p>
-      OOP adalah pendekatan yang menjadikan objek sebagai unit utama dalam pemrograman. 
-      Pendekatan ini membantu membuat program lebih rapi, modular, dan siap dikembangkan.
+      Polimorfisme adalah prinsip di mana satu antarmuka (nama method/fungsi) dapat digunakan untuk berbagai bentuk tipe data atau objek yang berbeda. Dalam pemrograman OOP, ini memungkinkan kelas turunan mengimplementasikan ulang metode kelas induk
     </p>
   </section>
 
    <section>
-    <h2>02. Class & Object (OOP)</h2>
+    <h2>02. Pewaris)</h2>
 
     <p>
-    Class adalah cetakan untuk membuat objek. Sedangkan object adalah hasil nyata dari clas tersebut.
-    Contoh pada class Car, kita bisa membuat beberapa mobil dengan atribut dan fungsi yang sama.
+   Pewarisan (Inheritance) adalah konsep dalam pemrograman berorientasi objek (OOP) di mana sebuah class (anak/subclass) bisa mewarisi sifat dan perilaku dari class lain (induk/superclass).
     </p>
     
     <div class="code-container">
       <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>// Nama   : Marsya Dwi Lintang
-// NIM    : 251410028
-// Kelas  : SI2A
+      <pre><code>// //Nama : Marsya Dwi Lintang
+//NIM  : 251410028
+//Kelas: SI2A
 
-class Car {
-  String? model;
-  String? color;
-
-  void start() {
-    print('Car Started!');
-  }
-        
-  void stop() {
-    print('Car stopped!');
+class Hewan {
+  void bersuara() {
+    print('...');
   }
 }
-        
+
+class Bebek extends Hewan {
+  @override
+  void bersuara() {
+    print('Uwek Uwek');
+  }
+}
+
 void main() {
-  Car myCar = Car();
-  
-  myCar.model = "Sedan";
-  myCar.color = "Merah";
-  myCar.start();
-  myCar.stop();
+  Bebek k = Bebek();
+  k.bersuara();
 }
-        
+            
 </code></pre>
     </div>
     <button onclick="openModal('https://dartpad.dev/a8fdc0d37ab28ad2cb4164cf6ae9029f')">Run Program</button>
