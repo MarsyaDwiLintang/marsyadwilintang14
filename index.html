@@ -1,173 +1,569 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
-  <title>OOP Dart Versi Web</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polimorfisme dan Abstraksi - Marsya Dwi Lintang</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    *{ margin:0; padding:0; box-sizing:border-box; }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      color:#f1f1f1;
+      background:#0b3d2e;
+      overflow-x:hidden;
+    }
+
+    /* Nature Background */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(circle at 20% 30%, #14532d, transparent 40%),
+        radial-gradient(circle at 80% 70%, #064e3b, transparent 40%),
+        radial-gradient(circle at 50% 50%, #052e16, transparent 60%);
+      z-index:-2;
+    }
+
+    .leaves{
+      position:fixed;
+      inset:0;
+      background-image:
+        radial-gradient(2px 2px at 20% 20%, #bbf7d0, transparent),
+        radial-gradient(2px 2px at 70% 40%, #86efac, transparent),
+        radial-gradient(2px 2px at 40% 80%, #4ade80, transparent);
+      background-size:400px 400px;
+      animation:move 60s linear infinite;
+      z-index:-1;
+    }
+
+    @keyframes move{
+      from{transform:translateY(0);}
+      to{transform:translateY(-400px);}
+    }
+
+    header{
+      text-align:center;
+      padding:120px 20px 60px;
+    }
+
+    header h1{
+      font-size:clamp(2rem,5vw,3.5rem);
+      color:#bbf7d0;
+      margin-bottom:15px;
+      letter-spacing:4px;
+    }
+
+    header p{
+      color:#86efac;
+      letter-spacing:2px;
+    }
+
+    .container{
+      max-width:1000px;
+      margin:auto;
+      padding:20px;
+    }
+
+    section{
+      background:rgba(255,255,255,0.05);
+      backdrop-filter:blur(20px);
+      border-radius:25px;
+      padding:50px;
+      margin-bottom:90px;
+      opacity:0;
+      transform:translateY(40px);
+      transition:0.8s;
+    }
+
+    section.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    h2{
+      color:#bbf7d0;
+      margin-bottom:25px;
+    }
+
+    p{
+      line-height:1.9;
+      margin-bottom:25px;
+      color:#e2e8f0;
+    }
+
+    .code-container{
+      background:#041c15;
+      border-radius:15px;
+      overflow:hidden;
+      margin:25px 0;
+    }
+
+    .code-header{
+      background:#052e16;
+      padding:10px 20px;
+      font-size:0.8rem;
+      color:#86efac;
+    }
+
+    pre{
+      padding:20px;
+      font-size:0.9rem;
+      color:#4ade80;
+      overflow-x:auto;
+    }
+
+    button{
+      padding:14px 40px;
+      border:none;
+      border-radius:30px;
+      background:#22c55e;
+      color:#052e16;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.4s;
+    }
+
+    button:hover{
+      background:#bbf7d0;
+      transform:scale(1.05);
+    }
+
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.9);
+      backdrop-filter:blur(10px);
+      z-index:1000;
+    }
+
+    .modal-content{
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      width:90%;
+      height:85%;
+      background:#052e16;
+      border-radius:20px;
+      overflow:hidden;
+    }
+
+    .modal-content iframe{
+      width:100%;
+      height:100%;
+      border:none;
+    }
+
+    .close{
+      position:absolute;
+      right:25px;
+      top:15px;
+      font-size:40px;
+      color:#bbf7d0;
+      cursor:pointer;
+    }
+
+    footer{
+      text-align:center;
+      padding:80px;
+      color:#86efac;
+      font-size:0.9rem;
+    }
+  </style>
 </head>
+
 <body>
-  <h2>Hasil Output OOP</h2>
-  <pre id="output"></pre>
 
-  <script>
-    let out = "";
+<div class="leaves"></div>
 
-    function print(text) {
-      out += text + "\n";
-      document.getElementById("output").textContent = out;
-    }
+<header>
+  <h1>OOP DART REPORT</h1>
+  <p>Marsya Dwi Lintang | 251410028 | SI2A</p>
+</header>
 
-    // =========================
-    // 1. Polimorfisme
-    // =========================
-    class Bentuk {
-      gambar() {
-        print("Menggambar bentuk");
-      }
-    }
+<div class="container">
 
-    class Lingkaran extends Bentuk {
-      gambar() {
-        print("Menggambar lingkaran");
-      }
-    }
+  <section>
+    <h2>01. Pengertian OOP</h2>
+    <p>
+      OOP adalah pendekatan yang menjadikan objek sebagai unit utama dalam pemrograman. 
+      Pendekatan ini membantu membuat program lebih rapi, modular, dan siap dikembangkan.
+    </p>
+  </section>
 
-    class Persegi extends Bentuk {
-      gambar() {
-        print("Menggambar persegi");
-      }
-    }
+   <section>
+    <h2>02. Class & Object (OOP)</h2>
 
-    let bentuk1 = new Lingkaran();
-    let bentuk2 = new Persegi();
+    <p>
+    Class adalah cetakan untuk membuat objek. Sedangkan object adalah hasil nyata dari clas tersebut.
+    Contoh pada class Car, kita bisa membuat beberapa mobil dengan atribut dan fungsi yang sama.
+    </p>
+    
+    <div class="code-container">
+      <div class="code-header">DART SOURCE CODE</div>
+      <pre><code>// Nama   : Marsya Dwi Lintang
+// NIM    : 251410028
+// Kelas  : SI2A
 
-    bentuk1.gambar();
-    bentuk2.gambar();
+class Car {
+  String? model;
+  String? color;
 
-    // =========================
-    // 2. Casting (simulasi JS)
-    // =========================
-    class Kendaraan {}
-    class Mobil extends Kendaraan {
-      klakson() {
-        print("Tin!");
-      }
-    }
+  void start() {
+    print('Car Started!');
+  }
+        
+  void stop() {
+    print('Car stopped!');
+  }
+}
+        
+void main() {
+  Car myCar = Car();
+  
+  myCar.model = "Sedan";
+  myCar.color = "Merah";
+  myCar.start();
+  myCar.stop();
+}
+        
+</code></pre>
+    </div>
+    <button onclick="openModal('https://dartpad.dev/a8fdc0d37ab28ad2cb4164cf6ae9029f')">Run Program</button>
+  </section>
 
-    let k = new Mobil();
+   <section>
+    <h2>03. Object Instantiation</h2>
 
-    if (k instanceof Mobil) {
-      k.klakson();
-    }
+    <p>
+   Object instantiation (instansiasi objek) adalah proses pembuatan instance (objek nyata/fisik) 
+   dari sebuah kelas (cetak biru/template) dalam pemrograman berorientasi objek (OOP).
+    </p>
+    
+    <div class="code-container">
+      <div class="code-header">DART SOURCE CODE</div>
+      <pre><code>// Nama   : Marsya Dwi Lintang
+// NIM    : 251410028
+// Kelas  : SI2A
+        
+class Car {
+  String? model;
+  String? color;
+}
 
-    // =========================
-    // 3. Abstract (simulasi)
-    // =========================
-    class KendaraanAbstract {
-      start() {
-        throw new Error("Method harus diimplementasi!");
-      }
+void main() {
+  Car myCar = Car();
+  myCar.model = "Sedan";
+  myCar.color = "Merah";
+  
+  print(myCar.model);
+  print(myCar.color);
+}
+        
+</code></pre>
+    </div>
+    <button onclick="openModal('https://dartpad.dev/fba24529fe01a2b8adfcc57266f37d70')">Run Program</button>
+  </section>
 
-      stop() {
-        print("Kendaraan berhenti");
-      }
-    }
+  <section>
+    <h2>04. Constructor</h2>
 
-    class Mobil2 extends KendaraanAbstract {
-      constructor(merk) {
-        super();
-        this.merk = merk;
-      }
+    <p>
+    Constructor adalah method atau fungsi khusus dalam pemrograman berorientasi objek (OOP) yang berjalan otomatis saat sebuah objek dibuat (instansiasi).
+    </p>
+    
+    <div class="code-container">
+      <div class="code-header">DART SOURCE CODE</div>
+      <pre><code>// Nama   : Marsya Dwi Lintang
+// NIM    : 251410028
+// Kelas  : SI2A
 
-      start() {
-        print("Mobil " + this.merk + " menyala");
-      }
-    }
+class Car {
+  String model; 
+  String color;
 
-    let m = new Mobil2("Toyota");
-    m.start();
-    m.stop();
+  Car(this.model, this.color);
 
-    // =========================
-    // 4. Interface (simulasi)
-    // =========================
-    class Bird {
-      terbang() {
-        print("Burung terbang tinggi");
-      }
-    }
+  void start() {
+    print('Engine Online: $model'); 
+  }
+}
 
-    class Plane {
-      terbang() {
-        print("Pesawat terbang cepat");
-      }
-    }
+void main() {
+  Car myCar = Car("Sedan", "Merah");
 
-    new Bird().terbang();
-    new Plane().terbang();
+  myCar.start(); 
+  print(myCar.color); 
+} 
+        
+</code></pre>
+    </div>
+    <button onclick="openModal('https://dartpad.dev/a9a36dedb9b2a1fa5f162cbbb9a09a53')">Run Program</button>
+  </section>
 
-    // =========================
-    // 5. Static
-    // =========================
-    class MathUtils {
-      static pi = 3.14;
+  <section>
+    <h2>05. Class Mahasiswa</h2>
+    
+    <p>
+      Class Mahasiswa merepresentasikan data mahasiswa seperti, nama, NIM,dan IPK.
+      Dengan method tertentu, data dapat ditampilkan secara sistematis dan lebih profesional.
+      Contoh ini menunjukkan penerapan OOP dalam pemodelan data mahasiswa.
+    </p>
+    
+    <div class="code-container">
+      <div class="code-header">DART SOURCE CODE</div>
+      <pre><code>// Nama   : Marsya Dwi Lintang
+// NIM    : 251410028
+// Kelas  : SI2A
 
-      static add(x, y) {
-        return x + y;
-      }
-    }
+  class Mahasiswa {
+  String nama; 
+  String nim; 
+  double ipk;  
 
-    print("Nilai pi: " + MathUtils.pi);
-    print("Hasil: " + MathUtils.add(10, 20));
+  Mahasiswa(this.nama, this.nim, this.ipk);
 
-    // =========================
-    // 6. Challenge (Luas & Keliling)
-    // =========================
-    class Bentuk2 {
-      hitungLuas() {
-        throw new Error("Harus diisi!");
-      }
+  void tampilkanData() {
+    print('Nama : $nama');
+    print('NIM  : $nim');
+    print('IPK  : $ipk');
+  }
+}
 
-      hitungKeliling() {
-        throw new Error("Harus diisi!");
-      }
-    }
+void main() {
+  Mahasiswa mhs1 = Mahasiswa("Marsya Dwi Lintang", "251410028", 3.90);
+  
+  mhs1.tampilkanData();
+}
 
-    class Persegi2 extends Bentuk2 {
-      constructor(sisi) {
-        super();
-        this.sisi = sisi;
-      }
+</code></pre>
+    </div>
+    <button onclick="openModal('https://dartpad.dev/41fda9435c437a3f47c15042dd752690')">Run Program</button>
+  </section>
 
-      hitungLuas() {
-        return this.sisi * this.sisi;
-      }
+  <section>
+    <h2>06. Encapsulation</h2>
 
-      hitungKeliling() {
-        return 4 * this.sisi;
-      }
-    }
+    <p>
+     Encapsulation (enkapsulasi) adalah salah satu konsep fundamental dalam Pemrograman Berorientasi Objek (OOP) yang menggabungkan data
+     (variabel) dan fungsi (method) ke dalam satu kesatuan unit (kelas) serta membatasi akses langsung ke komponen internal objek.
+    </p>
+    
+    <div class="code-container">
+      <div class="code-header">DART SOURCE CODE</div>
+      <pre><code>// Nama   : Marsya Dwi Lintang
+// NIM    : 251410028
+// Kelas  : SI2A
 
-    class Lingkaran2 extends Bentuk2 {
-      constructor(r) {
-        super();
-        this.r = r;
-      }
+class Person {
+  String _name;
+  int age;
 
-      hitungLuas() {
-        return 3.14 * this.r * this.r;
-      }
+  Person(this._name, this.age);
 
-      hitungKeliling() {
-        return 2 * 3.14 * this.r;
-      }
-    }
+  void setName(String name) {
+    _name = name;
+  }
 
-    let p = new Persegi2(4);
-    let l = new Lingkaran2(7);
+  String getName() {
+    return _name;
+  }
+}
 
-    print("Persegi -> Luas: " + p.hitungLuas() + ", Keliling: " + p.hitungKeliling());
-    print("Lingkaran -> Luas: " + l.hitungLuas() + ", Keliling: " + l.hitungKeliling());
+void main() {
+  Person person = Person("Dwi Marsya", 19);
+  print(person.age);
 
-  </script>
+  person.setName('Marsya Dwi');
+  print(person.getName());
+}
+ </code></pre>
+    </div>
+    <button onclick="openModal('https://dartpad.dev/869a04612f63d0025867e4f9591444cd')">Run Program</button>
+  </section>
+
+  <section>
+    <h2>07. This Keyword</h2>
+    <p>
+      Kata kunci this digunakan untuk merujuk pada instance saat ini dari sebuah class. 
+      Pada contoh ini, this.nama merujuk pada properti milik class Produk sehingga tidak terjadi konflik penamaan.
+    </p>
+    
+    <div class="code-container">
+      <div class="code-header">DART SOURCE CODE</div>
+      <pre><code>// Nama   : Marsya Dwi Lintang
+// NIM    : 251410028
+// Kelas  : SI2A
+
+class Product {
+  String nama; 
+  Product(this.nama);
+}
+
+void main() {
+  Product produk1 = Product("Laptop Gaming");
+  print(produk1.nama); 
+}
+      </code></pre>
+    </div>
+    <button onclick="openModal('https://dartpad.dev/934d295fc120be9654058f78ba802ea2')">Run Program</button>
+  </section>
+
+  <section>
+    <h2>08. Class Produk Lengkap</h2>
+    <p>
+      Pada bagian ini pengguna Named Parameters dan Required untuk menciptakan objek yang lebih deskriptif dan aman.
+    </p>
+    <div class="code-container">
+      <div class="code-header">DART SOURCE CODE</div>
+      <pre><code>// Nama   : Marsya Dwi Lintang
+// NIM    : 251410028
+// Kelas  : SI2A
+
+class Produk {
+  final String id, nama; 
+  final double harga; 
+  final int stok;   
+  final String kategori;
+
+  Produk({
+    required this.id,
+    required this.nama,
+    required this.harga,
+    this.stok = 0,
+    this.kategori = 'Umum',
+  });
+}
+
+void main() {
+  Produk laptop = Produk(
+    id: "P001",
+    nama: "Laptop Gaming",
+    harga: 15000000,
+    stok: 15,
+    kategori: "Elektronik",
+  );
+
+  Produk smartphone = Produk(
+    id: "P002",
+    nama: "Smartphone Flagship",
+    harga: 12000000,
+    stok: 25,
+  );
+
+  Produk kamera = Produk(
+    id: "P003",
+    nama: "Kamera Mirrorless",
+    harga: 20000000,
+  );
+
+  print(laptop.nama); 
+  print(smartphone.nama); 
+  print(kamera.nama); 
+}
+        
+      </code></pre>
+    </div>
+    <button onclick="openModal('https://dartpad.dev/c3276ab6b79c7e2fdb172bff675e1fbe')">Run Program</button>
+  </section>
+
+  <section>
+    <h2>09. Kesimpulan</h2>
+
+    <p>
+      Berdasarkan pratikum yang telah dilakukan, dapat disimpulkan bahwa konsep Object Orientedd Programming (oop) dalam
+      bahasa Dart terdiri dari class, object, constructor, method, dan penggunaan keyword this.
+    </p>
+
+    <p> 
+      Class digunakan sebagai blueprint untuk membuat object, sedangkan constructor berfungsi untuk menginisialisasi nilai awal saat object dibuat.
+      Dengan memahami konsep ini, program menjadi lebih terstruktur dan mudah dikembangkan.
+    </p>
+  </section>
+
+   <section>
+    <h2>Tugas Bonus-Class Hewan</h2>
+
+    <p>
+    Class Hewan memiliku atribut nama dan mehod bersuara().
+    Constructor digunakan untuk mengisi nilai nama saat object dibuat
+    </p>
+    
+    <div class="code-container">
+      <div class="code-header">DART SOURCE CODE</div>
+      <pre><code>// Nama   : Marsya Dwi Lintang
+// NIM    : 251410028
+// Kelas  : SI2A
+        
+class Hewan {
+  String nama;
+
+  // Constructor
+  Hewan(this.nama);
+
+  // Method
+  void bersuara() {
+    print("$nama sedang bersuara...");
+  }
+}
+
+void main() {
+  var myPet = Hewan("hamster");
+
+  print("Nama Hewan: ${myPet.nama}");
+  myPet.bersuara();
+}
+        
+ </code></pre>
+    </div>
+    <button onclick="openModal('https://dartpad.dev/52d2bfe83f09e1b2ca049ec5703cb3db')">Run Program</button>
+  </section>
+
+  
+
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <iframe id="dartFrame"></iframe>
+  </div>
+</div>
+
+<script>
+const sections=document.querySelectorAll("section");
+const observer=new IntersectionObserver(entries=>{
+ entries.forEach(entry=>{
+   if(entry.isIntersecting){
+     entry.target.classList.add("show");
+   }
+ });
+},{threshold:0.1});
+sections.forEach(sec=>observer.observe(sec));
+
+function openModal(link){
+ document.getElementById("modal").style.display="block";
+ document.getElementById("dartFrame").src=link;
+ document.body.style.overflow="hidden";
+}
+
+function closeModal(){
+ document.getElementById("modal").style.display="none";
+ document.getElementById("dartFrame").src="";
+ document.body.style.overflow="auto";
+}
+
+window.onclick=function(e){
+ if(e.target==document.getElementById("modal")) closeModal();
+}
+</script>
+
 </body>
 </html>
