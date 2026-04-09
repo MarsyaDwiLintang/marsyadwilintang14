@@ -1,1012 +1,888 @@
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Polimorfisme dan Abstraksi - Marsya Dwi Lintang</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
-    rel="stylesheet">
+<title>Laporan OOP Dart</title>
 
-  <style>
-    *{ margin:0; padding:0; box-sizing:border-box; }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-    body{
-      font-family:'Poppins',sans-serif;
-      color:#f1f1f1;
-      background:#0b3d2e;
-      overflow-x:hidden;
-    }
+<style>
 
-    /* Nature Background */
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      background:
-        radial-gradient(circle at 20% 30%, #14532d, transparent 40%),
-        radial-gradient(circle at 80% 70%, #064e3b, transparent 40%),
-        radial-gradient(circle at 50% 50%, #052e16, transparent 60%);
-      z-index:-2;
-    }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
 
-    .leaves{
-      position:fixed;
-      inset:0;
-      background-image:
-        radial-gradient(2px 2px at 20% 20%, #bbf7d0, transparent),
-        radial-gradient(2px 2px at 70% 40%, #86efac, transparent),
-        radial-gradient(2px 2px at 40% 80%, #4ade80, transparent);
-      background-size:400px 400px;
-      animation:move 60s linear infinite;
-      z-index:-1;
-    }
+body{
+background:#070a44;
+color:white;
+padding:40px 20px;
+}
 
-    @keyframes move{
-      from{transform:translateY(0);}
-      to{transform:translateY(-400px);}
-    }
+/* HEADER */
 
-    header{
-      text-align:center;
-      padding:120px 20px 60px;
-    }
+header{
+text-align:center;
+margin-bottom:50px;
+}
 
-    header h1{
-      font-size:clamp(2rem,5vw,3.5rem);
-      color:#bbf7d0;
-      margin-bottom:15px;
-      letter-spacing:4px;
-    }
+header h1{
+font-size:42px;
+font-weight:700;
+}
 
-    header p{
-      color:#86efac;
-      letter-spacing:2px;
-    }
+header p{
+opacity:0.8;
+margin-top:10px;
+}
 
-    .container{
-      max-width:1000px;
-      margin:auto;
-      padding:20px;
-    }
+/* CONTAINER */
 
-    section{
-      background:rgba(255,255,255,0.05);
-      backdrop-filter:blur(20px);
-      border-radius:25px;
-      padding:50px;
-      margin-bottom:90px;
-      opacity:0;
-      transform:translateY(40px);
-      transition:0.8s;
-    }
+.container{
+max-width:1100px;
+margin:auto;
+display:flex;
+flex-direction:column;
+gap:30px;
+}
 
-    section.show{
-      opacity:1;
-      transform:translateY(0);
-    }
+/* CARD */
 
-    h2{
-      color:#bbf7d0;
-      margin-bottom:25px;
-    }
+.card{
+background:#1c1f6e;
+padding:30px;
+border-radius:18px;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
 
-    p{
-      line-height:1.9;
-      margin-bottom:25px;
-      color:#e2e8f0;
-    }
+/* TITLE */
 
-    .code-container{
-      background:#041c15;
-      border-radius:15px;
-      overflow:hidden;
-      margin:25px 0;
-    }
+.card h2{
+color:#78dcff;
+margin-bottom:10px;
+}
 
-    .code-header{
-      background:#052e16;
-      padding:10px 20px;
-      font-size:0.8rem;
-      color:#86efac;
-    }
+/* TEXT */
 
-    pre{
-      padding:20px;
-      font-size:0.9rem;
-      color:#4ade80;
-      overflow-x:auto;
-    }
+.card p{
+line-height:1.7;
+opacity:0.9;
+margin-bottom:10px;
+}
 
-    button{
-      padding:14px 40px;
-      border:none;
-      border-radius:30px;
-      background:#22c55e;
-      color:#052e16;
-      font-weight:700;
-      cursor:pointer;
-      transition:0.4s;
-    }
+/* LIST */
 
-    button:hover{
-      background:#bbf7d0;
-      transform:scale(1.05);
-    }
+ul{
+margin-left:20px;
+line-height:1.7;
+margin-top:10px;
+}
 
-    .modal{
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.9);
-      backdrop-filter:blur(10px);
-      z-index:1000;
-    }
+/* BUTTON */
 
-    .modal-content{
-      position:absolute;
-      top:50%;
-      left:50%;
-      transform:translate(-50%,-50%);
-      width:90%;
-      height:85%;
-      background:#052e16;
-      border-radius:20px;
-      overflow:hidden;
-    }
+.btn{
+display:inline-block;
+margin-top:10px;
+padding:8px 14px;
+background:#00aaff;
+color:white;
+border-radius:8px;
+text-decoration:none;
+font-size:14px;
+cursor:pointer;
+}
 
-    .modal-content iframe{
-      width:100%;
-      height:100%;
-      border:none;
-    }
+.btn:hover{
+background:#008ecc;
+}
 
-    .close{
-      position:absolute;
-      right:25px;
-      top:15px;
-      font-size:40px;
-      color:#bbf7d0;
-      cursor:pointer;
-    }
+/* POPUP */
 
-    footer{
-      text-align:center;
-      padding:80px;
-      color:#86efac;
-      font-size:0.9rem;
-    }
-  </style>
+.popup{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.85);
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.popup-content{
+width:90%;
+max-width:1200px;
+height:85%;
+background:#111;
+border-radius:12px;
+position:relative;
+overflow:hidden;
+}
+
+.popup iframe{
+width:100%;
+height:100%;
+border:none;
+}
+
+.close{
+position:absolute;
+top:10px;
+right:18px;
+font-size:30px;
+color:white;
+cursor:pointer;
+}
+
+/* CODE BOX */
+
+/* PREVIEW SOURCE CODE */
+
+.code-box{
+background:#000;
+padding:30px;
+border-radius:20px;
+width:100%;
+max-width:650px;
+margin:20px auto;
+box-shadow:0 0 25px rgba(0,255,200,0.3);
+border:3px solid #3df5d4;
+}
+
+/* Judul kotak */
+
+.code-box h3{
+text-align:center;
+margin-bottom:20px;
+color:#ffd56b;
+font-size:18px;
+letter-spacing:1px;
+}
+
+/* Text kode */
+
+pre{
+color:#00ff9d;
+font-family:monospace;
+font-size:15px;
+line-height:1.6;
+
+white-space:pre-wrap;
+word-break:break-word;
+overflow-x:auto;
+}
+
+@media(max-width:768px){
+
+header h1{
+font-size:30px;
+}
+
+.popup-content{
+height:90%;
+width:95%;
+}
+
+}
+
+<head>
+
+<style>
+
+.code-box{
+background:black;
+padding:25px;
+border-radius:20px;
+width:350px;
+margin:auto;
+box-shadow:0 0 20px rgba(0,0,0,0.5);
+border:2px solid #00cfff;
+}
+
+.code-box h3{
+color:#ccc;
+text-align:center;
+margin-bottom:15px;
+}
+
+pre{
+color:#00cfff;
+font-family:monospace;
+font-size:14px;
+text-shadow:0 0 5px #00cfff;
+}
+
+.run{
+margin-top:20px;
+background:gold;
+border:none;
+padding:15px 40px;
+border-radius:40px;
+font-weight:bold;
+cursor:pointer;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<div class="leaves"></div>
-
 <header>
-  <h1>Polimorfisme dan Abstraksi
-  </h1>
-  <p>Marsya Dwi Lintang | 251410028 | SI2A</p>
+<h1>Konstruktor dan Enkapsulasi</h1>
+<p>Marsya Dwi Lintang | 251410028 | SI2A</p>
 </header>
 
 <div class="container">
 
-  <section>
-    <h2>Pengertian</h2>
-    <p>
-      polimorfisme adalah kemampuan suatu objek atau metode untuk memiliki banyak bentuk sehingga satu fungsi bisa digunakan pada objek yang berbeda dengan cara kerja yang berbeda.
-      abstraksi adalah proses menyederhanakan sistem dengan menyembunyikan detail yang tidak perlu dan hanya menampilkan bagian penting agar lebih mudah dipahami dan digunakan.
-    </p>
-  </section>
+<div class="card">
+<h2>Pengertian Polimorfisme & Abstraksi</h2>
+<p>
+Polimorfisme adalah kemampuan objek memiliki banyak bentuk, sedangkan abstraksi adalah proses menyembunyikan detail implementasi dan hanya menampilkan bagian penting dalam program.</p>
+</div>
 
-   <section>
-    <h2>01. Pewarisan</h2>
+<div class="card">
+<h2>Review Sesi 4 – Polimorfisme & Abstraksi</h2>
+<p>Polimorfisme adalah kemampuan objek dari subclass untuk digunakan sebagai superclass, sedangkan abstract class adalah class yang tidak dapat diinstansiasi dan dapat memiliki method abstract maupun concrete. Dalam Dart, interface bersifat implicit dan digunakan dengan keyword implements.</p>
+  
+<div class="card">
+<h2>Multiple Inheritance dengan Mixin</h2>
+<p>Dart menggunakan mixin untuk mengambil fitur dari beberapa class tanpa membuat inheritance yang kompleks. Konsep ini memungkinkan sebuah class memiliki lebih dari satu kemampuan.</p>
+</div>
 
-    <p>
-    Pewarisan adalah konsep dimana class anak mengambil sifat dari class induk menggunakan extends. Dengan ini, kita tidak perlu menulis ulang kode yang sama.
-    </p>
-    
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>//Nama : Marsya Dwi Lintang
-//NIM  : 251410028
-//Kelas: SI2A
+<div class="card">
+<h2>1. Constructor Mobil</h2>
+<p>Constructor adalah method khusus pada class yang digunakan untuk membuat objek dan menginisialisasi nilai awal atribut.</p>
+<div class="card">
+<div class="code-box">
 
-class Hewan {
-  void bersuara() {
-    print('...');
-  }
-}
+<h3>DART SOURCE CODE</h3>
 
-class Bebek extends Hewan {
-  @override
-  void bersuara() {
-    print('Uwek Uwek');
-  }
-}
+<pre>
+// Nama  : Marsya Dwi Lintang
+// NIM   : 251410028
+// Kelas : SI2A
 
-void main() {
-  Bebek k = Bebek();
-  k.bersuara();
-}
-        
-</code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/29b71497b6969800457bc5c797f70f77?run=true','_blank')">Run Program</button>
-  </section>
 
-  <section>
-    <h2>Pengertian Polimorfisme</h2>
-    <p>
-      Polimorfisme adalah prinsip di mana satu antarmuka (nama method/fungsi) dapat digunakan untuk berbagai bentuk tipe data atau objek yang berbeda. Dalam pemrograman OOP, ini memungkinkan kelas turunan mengimplementasikan ulang metode kelas induk
-    </p>
-  </section>
+import 'dart:convert';
 
-   <section>
-    <h2>02. Polimorfisme dengan Inheritance</h2>
-
-    <p>
-      Kita bisa menyimpan objek anak ke dalam tipe parent. Jadi meskipun tipenya sama (misalnya Hewan), hasilnya bisa beda tergantung objeknya.
-    </p>
-    
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>//Nama : Marsya Dwi Lintang
-//Nim  : 251410028
-//Kelas: SI2A
-
-class Bentuk {
-  void gambar() => print('Menggambar bentuk');
-}
-
-class Lingkaran extends Bentuk {
-  @override
-  void gambar() => print('Menggambar lingkaran');
-}
-
-class Persegi extends Bentuk {
-  @override
-  void gambar() => print('Menggambar persegi');
-}
-
-void main() {
-  Bentuk bentuk1 = Lingkaran(); 
-  Bentuk bentuk2 = Persegi();
-
-  bentuk1.gambar(); 
-  bentuk2.gambar(); 
-}
-
-</code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/afb7fb9b09a162d9f845a25d6aa70933?run=true','_blank')">Run Program</button>
-  </section>
-
-<section>
-    <h2>Manfaat Polimorfisme</h2>
-    <p>
-      Kode jadi lebih fleksibel, mudah ditambah fitur baru, bisa pakai ulang kode, lebih mudah diperbaiki
-  </section>
-        
-  <section>
-    <h2>03. is dan as Operator</h2>
-
-    <p>Is untuk mengecek tipe data sedangkan as untuk mengubah tipe(casting), digunakan saat kita mau memastikan tipe objek sebelum dipakai.</p>
-    
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>//Nama : Marsya Dwi Lintang
-//NIM  : 251410028
-//Kelas: SI2A
-
-class Kendaraan {}
-
-class Mobil extends Kendaraan {
-  void klakson() {
-    print('Tin!');
-  }
-}
-
-void main() {
-  Kendaraan k = Mobil();
-
-  if (k is Mobil) {
-    k.klakson();
-  }
-
-  (k as Mobil?)?.klakson();
-}
-        
-</code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/6894475f0678b4efce66197810568776?run=true','_blank')">Run Program</button>
-  </section>
-
-  <section>
-    <h2>04. Praktik1-Polimorfisme dengan List</h2>
-    
-    <p>
-     Kita bisa menyimpan berbagai objek dalam satu list lalu menjalankan method yang sama.
-    </p>
-    
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>//Nama : Marsya Dwi Lintang
-//NIM  : 251410028
-//Kelas: SI2A
-
-class Hewan {
-  void bersuara() {
-    print('Hewan bersuara');
-  }
-}
-
-class Kucing extends Hewan {
-  @override
-  void bersuara() => print('Meong');
-}
-
-class Anjing extends Hewan {
-  @override
-  void bersuara() => print('Guk guk');
-}
-
-class Burung extends Hewan {
-  @override
-  void bersuara() => print('Cuit cuit');
-}
-
-void main() {
-  List<Hewan> daftarHewan = [
-    Kucing(),
-    Anjing(),
-    Burung()
-  ];
-
-  for (var h in daftarHewan) {
-    h.bersuara();
-  }
-}
-
-</code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/c654356b8a617d404f28105f091355b5?run=true','_blank')">Run Program</button>
-  </section>
-
-  <section>
-    <h2>Pengantar Abstraksi</h2>
-    <p>
-    pengantar abstraksi adalah penjelasan awal tentang konsep abstraksi dalam OOP yang bertujuan menyederhanakan sistem dengan menampilkan fungsi penting saja dan menyembunyikan detail proses agar program lebih mudah dipahami dan digunakan.  tipe data atau objek yang berbeda. Dalam pemrograman OOP, ini memungkinkan kelas turunan mengimplementasikan ulang metode kelas induk
-    </p>
-  </section>
-
-  <section>
-    <h2>05. Abstract Class</h2>
-    
-    <p>
-    Abstract class adalah class yang tidak bisa dibuat objek langsung bisa punya method kosong (abstract) dan berisi (concrete), digunakan sebagai kerangka dasar
-    </p>
-    
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>// Nama : Marsya Dwi Lintang
-// NIM  : 251410028
-// Kleas: SI2A
-
-abstract class Kendaraan {
+class Mobil {
   String? merk;
+  int? tahun;
 
-  void start();
+  // Parameterized constructor
+  Mobil(this.merk, this.tahun);
 
-  void stop() {
-    print('Kendaraan berhenti');
+  // Named constructor
+  Mobil.baru() {
+    merk = 'Toyota';
+    tahun = 2023;
   }
-}
 
-class Mobil extends Kendaraan {
+  // Named constructor dengan parameter
+  Mobil.dariJson(Map<String, dynamic> json) {
+    merk = json['merk'];
+    tahun = json['tahun'];
+  }
+
   @override
-  void start() {
-    print('Mobil $merk menyala');
+  String toString() {
+    return 'Mobil{merk: $merk, tahun: $tahun}';
   }
 }
 
 void main() {
-  Mobil m = Mobil();
-  m.merk = 'Toyota';
+  print('--- Demonstrasi Class Mobil ---');
+
+  var mobilA = Mobil('Honda', 2020);
+  print('Mobil A: $mobilA');
+
+  var mobilB = Mobil.baru();
+  print('Mobil B: $mobilB');
+
+  String jsonString = '{"merk": "Suzuki", "tahun": 2021}';
+  Map<String, dynamic> jsonData = jsonDecode(jsonString);
+  var mobilC = Mobil.dariJson(jsonData);
+  print('Mobil C: $mobilC');
+
+  Map<String, dynamic> anotherJsonData = {'merk': 'Mitsubishi', 'tahun': 2022};
+  var mobilD = Mobil.dariJson(anotherJsonData);
+  print('Mobil D: $mobilD');
+}
+</pre>
+
+</div>
+
+</div>
+<button class="btn" onclick="openPopup('https://dartpad.dev/7cf3b434e898084aa16d711f9069bd70?run=true')">Lihat DartPad</button>
+</div>
+
+<div class="card">
+<h2>2. Constant Constructor</h2>
+<p>Constant constructor digunakan untuk membuat objek konstan sehingga nilai objek tidak dapat diubah setelah dibuat.</p>
+<div class="card">
+<div class="code-box">
+
+<h3>DART SOURCE CODE</h3>
+
+<pre>
+//Nama : Marsya Dwi Lintang
+//NIM  : 251410028
+//Kelas: SI2A
+
+class Warna {
+  final int r, g, b;
+  const Warna(this.r, this.g, this.b);
+
+  @override
+  String toString() {
+    return 'Warna(r: $r, g: $g, b: $b)';
+  }
+}
+
+void main() {
+  const merah = Warna(255, 0, 0);
+  const merahLagi = Warna(255, 0, 0);
+
+  print(merah);
+  print(merahLagi);
+}
+</pre>
+
+</div>
+
+</div>
+<button class="btn" onclick="openPopup('https://dartpad.dev/40cdc2f435ceca07ddaca0c3131d94c6?run=true')">Lihat DartPad</button>
+</div>        
+
+<div class="card">
+<h2>3. Initializer List</h2>
+<p>Initializer list digunakan untuk menginisialisasi variabel sebelum constructor dijalankan.</p>
+<div class="card">
+<div class="code-box">
+
+<h3>DART SOURCE CODE</h3>
+
+<pre>
+//Nama : Marsya Dwi Lintang
+//NIM  : 251410028
+//Kelas: SI2A
+
+class Titik {
+  final double x, y;
+
+  Titik(double x, double y)
+      : x = x.abs(),
+        y = y.abs() {
+    print('Titik dibuat di (${this.x}, ${this.y})');
+  }
+}
+
+void main() {
+  var titik1 = Titik(3.0, 4.0);
+  print('Titik 1: x=${titik1.x}, y=${titik1.y}');
+
+  var titik2 = Titik(-5.0, 10.0);
+  print('Titik 2: x=${titik2.x}, y=${titik2.y}');
+
+  var titik3 = Titik(-1.5, -2.5);
+  print('Titik 3: x=${titik3.x}, y=${titik3.y}');
+}
+</pre>
+
+</div>
+
+</div>
+<button class="btn" onclick="openPopup('https://dartpad.dev/607f6fe45706915f6be46629fb1303c9?run=true')">Lihat DartPad</button>
+</div>
+
+<div class="card">
+<h2>Praktik 1:Multiple Constructor</h2>
+<p>Program ini membuat class Mahasiswa yang memiliki beberapa constructor,
+yaitu constructor default dan named constructor (dariMap() dan tanpaNama()). 
+Tujuannya agar objek mahasiswa bisa dibuat dengan cara yang berbeda. Pada program dibuat 3 objek mahasiswa menggunakan masing-masing constructor.</p>
+<div class="card">
+<div class="code-box">
+
+<h3>DART SOURCE CODE</h3>
+
+<pre>
+//Nama : Marsya Dwi Lintang
+//NIM  : 251410028
+//Kelas: SI2A
+
+class Mahasiswa {
+  String nama;
+  int umur;
+
+  // Constructor default
+
+  Mahasiswa(this.nama, this.umur);
+
+  Mahasiswa.dariMap(Map<String, dynamic> data)
+      : nama = data['nama'],
+        umur = data['umur'];
+
+  Mahasiswa.tanpaNama(this.umur) : nama = "Tanpa Nama";
+
+  void tampilkan() {
+    print("Nama: $nama");
+    print("Umur: $umur");
+    print("----------------");
+  }
+}
+
+void main() {
+
+  var mhs1 = Mahasiswa("Marsya", 20);
+ 
+  var mhs2 = Mahasiswa.dariMap({
+    "nama": "Lintang",
+    "umur": 21
+  });
+
+  var mhs3 = Mahasiswa.tanpaNama(19);
+  mhs1.tampilkan();
+  mhs2.tampilkan();
+  mhs3.tampilkan();
+}
+</pre>
+
+</div>
+
+</div>
+<button class="btn" onclick="openPopup('https://dartpad.dev/a8c5f02228b860bd1fffe3fcb5cdf7d8?run=true')">Lihat Dartpad</button>
+</div>
   
-  m.start();
-  m.stop();
+<div class="card">
+<h2>4. Private Variable</h2>
+<p>Private variable adalah variabel yang hanya dapat diakses di dalam class dengan menggunakan tanda underscore (_).</p>
+<div class="card">
+<div class="code-box">
+
+<h3>DART SOURCE CODE</h3>
+
+<pre>
+// Nama  : Marsya Dwi Lintang
+// NIM   : 251410028
+// Kelas : SI2A
+
+class Person {
+  String _name;
+  int age;
+
+  Person(this._name, this.age);
 }
 
- </code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/5245a643cc15485130704c9e03227034?run=true','_blank')">Run Program</button>
-  </section>
+void main() {
 
-  <section>
-    <h2>06. Abstract Method</h2>
-    <p>
-    abstract method adalah metode yang tidak memiliki isi atau implementasi di dalam abstract class dan harus diimplementasikan oleh class turunan yang mewarisinya agar dapat digunakan dalam program.
-    </p>
-    
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>//Nama : Marsya Dwi Lintang
-//NIM  : 251410028
-//Kelas: SI2A
+  Person person = Person("Marsya", 20);
 
-abstract class AlatMusik {
-  void mainkan();
+  print(person._name);
+  print(person.age);
 
-  void info() {
-    print('Ini adalah alat musik');
+}
+</pre>
+
+</div>
+
+</div>
+<button class="btn" onclick="openPopup('https://dartpad.dev/adccd4fbb13219cc689274f6de55bf79?run=true')">Lihat DartPad</button>
+</div>
+
+<div class="card">
+<h2>5. Getter</h2>
+<p>Getter adalah method yang digunakan untuk mengambil nilai dari variabel private.</p>
+<div class="card">
+<div class="code-box">
+
+<h3>DART SOURCE CODE</h3>
+
+<pre>
+// Nama  : Marsya Dwi Lintang
+// NIM   : 251410028
+// Kelas : SI2A
+
+class Person {
+  String _name;
+  int age;
+
+  Person(this._name, this.age);
+
+  String get getName1 {
+    return _name;
   }
-}
 
-class Gitar extends AlatMusik {
-  @override
-  void mainkan() {
-    print('Jreng jreng...');
+  String getName() {
+    return _name;
   }
 }
 
 void main() {
-  Gitar gitar = Gitar();
+  Person person = Person("Marsya", 19);
+
+  print(person.age);
+  print(person.getName());
+  print(person.getName1);
+}
+</pre>
+
+</div>
+
+</div>
+<button class="btn" onclick="openPopup('https://dartpad.dev/884cf73ac193f066ca179710db4ebc68?run=true')">Lihat DartPad</button>
+</div>
+
+<div class="card">
+<h2>6. Setter</h2>
+<p>Setter adalah method yang digunakan untuk mengubah nilai dari variabel private.</p>
+<div class="card">
+<div class="code-box">
+
+<h3>DART SOURCE CODE</h3>
+
+<pre>
+// Nama  : Marsya Dwi Lintang
+// NIM   : 251410028
+// Kelas : SI2A
+
+class Person {
+  String _name;
+  int age;
+
+  Person(this._name, this.age);
+
+  set setName1(String name) {
+    _name = name;
+  }
+
+  void setName(String name) {
+    _name = name;
+  }
+
+  String getName() {
+    return _name;
+  }
+}
+
+void main() {
+  Person person = Person("Marsya", 20);
+
+  person.setName('Dwi');
+  print(person.getName());
+
+  person.setName1 = 'Lintang';
+  print(person.getName());
+}
+</pre>
+
+</div>
+
+</div>
+<button class="btn" onclick="openPopup('https://dartpad.dev/29daa42f713a908e2f0a38c69fbcfbe5?run=true')">Lihat DartPad</button>
+</div>
+
+<div class="card">
+<h2>7. Getter & Setter dengan Validasi</h2>
+<p>Getter dan setter dapat digunakan untuk menambahkan validasi agar data yang dimasukkan sesuai aturan.</p>
+<div class="card">
+<div class="code-box">
+
+<h3>DART SOURCE CODE</h3>
+
+<pre>
+// Nama  : Marsya Dwi Lintang
+// NIM   : 251410028
+// Kelas : SI2A
   
-  gitar.info();
-  gitar.mainkan();
-}
+class Produk {
+  String _nama;
+  double _harga;
 
-      </code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/6a93abd2560ccf10fff0a77a3d9c7905?run=true','_blank')">Run Program</button>
-  </section>
+  Produk(this._nama, this._harga);
 
-  <section>
-    <h2>07. Interface di Dart</h2>
-    <p>
-      interface adalah konsep dalam OOP yang berfungsi sebagai kontrak atau aturan yang berisi metode yang harus diimplementasikan oleh class lain, sehingga setiap class yang menggunakan interface wajib mengikuti metode yang telah ditentukan.
-    </p>
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>// Nama : Marsya Dwi Lintang
-// NIM  : 251410028
-// Kelas: S1A
+  String get nama => _nama;
+  double get harga => _harga;
 
-interface class Flyable {
-  void terbang() => print('Terbang...');
-}
-
-class Bird implements Flyable {
-  @override
-  void terbang() => print('Burung terbang tinggi');
-}
-
-class Plane implements Flyable {
-  @override
-  void terbang() => print('Pesawat terbang cepat');
-}
-
-void main() {
-  Bird b = Bird();
-  Plane p = Plane();
-
-  b.terbang();
-  p.terbang();
-}
-        
-      </code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/54cecb27b21b101daf7ef5bfceb59fd6?run=true','_blank')">Run Program</button>
-  </section>
-
-  <section>
-    <h2>Perbedaan Extends dan [Implements</h2>
-
-    <p>
-      extends adalah pewarisan class dari class induk sehingga class turunan bisa menggunakan semua properti dan metode dari class induk, sedangkan implements adalah penggunaan interface sebagai kontrak sehingga class harus membuat ulang semua metode yang ada di interface.
-    </p>
-  </section>
-
-   <section>
-    <h2>08. Static Members dan Method</h2>
-
-    <p>
-    Static itu milik class, bukan objek.Jadi bisa dipakai langsung tanpa membuat objek.
-    </p>
-    
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>//Nama : Marsya Dwi Lintang
-//NIM  : 251410028
-//Kelas: SI2A
-
-class MathUtils {
-  static double pi = 3.14;
-
-  static int add(int x, int y) {
-    return x + y;
-  }
-}
-
-void main() {
-  print('Nilai pi : ${MathUtils.pi}');
-  print('Result : ${MathUtils.add(10, 20)}');
-}
-
-</code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/2f6a02ff815a3bc4796e7de54baf1edb?run=true','_blank')">Run Program</button>
-  </section>
-
-<section>
-    <h2>09. Praktik2-Sistem Pembayaran</h2>
-
-    <p>
-     sistem pembayaran adalah mekanisme atau proses yang digunakan untuk melakukan transaksi pembayaran antara pembeli dan penjual, baik secara tunai maupun non-tunai, agar pembayaran dapat dilakukan dengan mudah, aman, dan teratur.
-    </p>
-    
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>//Nama : Marsya Dwi Lintang
-//NIM  : 251410028
-//Kelas: SI2A
-
-abstract class MetodePembayaran {
-  void bayar(double jumlah);
-}
-
-class KartuKredit implements MetodePembayaran {
-  @override
-  void bayar(double jumlah) {
-    print('Bayar $jumlah dengan Kartu Kredit');
-  }
-}
-
-class EWallet implements MetodePembayaran {
-  @override
-  void bayar(double jumlah) {
-    print('Bayar $jumlah dengan E-Wallet');
-  }
-}
-
-class Tunai implements MetodePembayaran {
-  @override
-  void bayar(double jumlah) {
-    print('Bayar $jumlah dengan Tunai');
-  }
-}
-
-void main() {
-  List<MetodePembayaran> metode = [
-    KartuKredit(),
-    EWallet(),
-    Tunai()
-  ];
-
-  for (var m in metode) {
-    m.bayar(100000);
-  }
-}
-        
- </code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/abd04752ae6ec676d174f5871331c88f?run=true','_blank')">Run Program</button>
-  </section>
-
-  <section>
-    <h2>10. Studi kasus:Sistem Bentuk Geometrik</h2>
-
-    <p>
-     sistem bentuk geometrik adalah sistem dalam OOP yang menggunakan konsep abstraksi untuk merepresentasikan berbagai bentuk geometri (seperti persegi, lingkaran, segitiga) dalam satu class dasar, sehingga setiap bentuk memiliki metode yang sama seperti menghitung luas atau keliling tetapi dengan perhitungan yang berbeda.
-    </p>
-
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>//Nama : Marsya Dwi Lintang
-//NIM  : 251410028
-//Kelas: SI2A
-
-abstract class Bentuk {
-  double hitungLuas();
-  double hitungKeliling();
-
-  void info() {
-    print('Luas: ${hitungLuas()}, Keliling: ${hitungKeliling()}');
-  }
-}
-
-class Persegi implements Bentuk {
-  double sisi;
-
-  Persegi(this.sisi);
-
-  @override
-  double hitungLuas() => sisi * sisi;
-
-  @override
-  double hitungKeliling() => 4 * sisi;
-
-  @override
-  void info() {
-    print('Persegi sisi $sisi, luas ${hitungLuas()}, keliling ${hitungKeliling()}');
-  }
-}
-
-class Lingkaran implements Bentuk {
-  double radius;
-
-  Lingkaran(this.radius);
-
-  @override
-  double hitungLuas() => 3.14 * radius * radius;
-
-  @override
-  double hitungKeliling() => 2 * 3.14 * radius;
-
-  @override
-  void info() {
-    print('Lingkaran radius $radius, luas ${hitungLuas()}, keliling ${hitungKeliling()}');
-  }
-}
-
-void main() {
-  Bentuk b1 = Persegi(4);
-  Bentuk b2 = Lingkaran(7);
-
-  b1.info();
-  b2.info();
-}
-
- </code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/89c88b834c7a33ee592731229d1f2d5f?run=true','_blank')">Run Program</button>
-  </section>
-
- <section>
-    <h2>Kesimpulan</h2>
-
-    <p>
-      Dari materi ini bisa disimpulkan bahwa: Pemrograman OOP membantu kita membuat program lebih rapi, fleksibel, dan mudah dikembangkan. Dengan konsep seperti pewarisan, polimorfisme, abstraksi, dan interface, kita bisa menghemat kode dan membuat sistem yang lebih terstruktur.
-    </p>
-  </section>
-
-    <section>
-    <h2>11. Bonus1</h2>
-
-    <p>
-     Latihan ini menunjukkan penggunaan abstract class dan polimorfisme, di mana Pekerja menjadi dasar yang menentukan method bekerja() serta bisa memiliki method lain yang sudah berisi seperti istirahat(), kemudian class seperti Programmer, Dokter, dan Guru menjalankan method tersebut dengan cara yang berbeda-beda sesuai perannya, sehingga meskipun strukturnya sama, perilakunya bisa berbeda.
-    </p>
-
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>// Nama : Marsya Dwi Lintang
-// NIM  : 251410028
-// Kelas: S1A
-
-abstract class Pekerja {
-  void bekerja();
-  void info();
-}
-
-class Programmer implements Pekerja {
-  @override
-  void bekerja() {
-    print('Programmer sedang coding');
-  }
-
-  @override
-  void info() {
-    print('Saya seorang programmer');
-  }
-}
-
-class Dokter implements Pekerja {
-  @override
-  void bekerja() {
-    print('Dokter sedang memeriksa pasien');
-  }
-
-  @override
-  void info() {
-    print('Saya seorang dokter');
-  }
-}
-
-class Guru implements Pekerja {
-  @override
-  void bekerja() {
-    print('Guru sedang mengajar');
-  }
-
-  @override
-  void info() {
-    print('Saya seorang guru');
-  }
-}
-
-void main() {
-  Programmer p = Programmer();
-  Dokter d = Dokter();
-  Guru g = Guru();
-
-  p.bekerja();
-  p.info();
-
-  d.bekerja();
-  d.info();
-
-  g.bekerja();
-  g.info();
-}
-
-</code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/51824c16dd40008a66c179a9d9e4574e?run=true','_blank')">Run Program</button>
-  </section>
-
-   <section>
-    <h2>12. Bonus2</h2>
-
-    <p>
-    Kode ini menjelaskan bahwa dalam Dart, pewarisan berganda tidak dapat dilakukan dengan extends, namun dapat dicapai melalui implements. Dengan demikian, satu class dapat mengikuti beberapa aturan atau antarmuka dari class lain sekaligus, meskipun tidak menjadi turunan langsung.
-    </p>
-
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>//Nama : Marsya Dwi Lintang
-//NIM  : 251410028
-//Kelas: SI2A
-
-class Komputer {
-  void hitung() => print('Mengolah data');
-}
-
-class Kamera {
-  void foto() => print('Mengambil foto');
-}
-
-class Telepon {
-  void telpon() => print('Melakukan panggilan');
-}
-
-class Tablet implements Komputer, Kamera, Telepon {
-  @override
-  void hitung() {
-    print('Tablet mengolah data');
-  }
-
-  @override
-  void foto() {
-    print('Tablet mengambil foto');
-  }
-
-  @override
-  void telpon() {
-    print('Tablet melakukan panggilan');
-  }
-}
-
-void main() {
-  Tablet t = Tablet();
-  t.hitung();
-  t.foto();
-  t.telpon();
-}
-
-</code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/feafcf2bcc416284d16f1faa05cd2593?run=true','_blank')">Run Program</button>
-  </section>
-
-  <section>
-    <h2>13. Bonus3</h2>
-
-    <p>
-    Kode ini menunjukkan penggunaan static, yaitu atribut atau fungsi yang menjadi milik class secara langsung, bukan milik objek. Karena itu, penggunaannya bisa langsung melalui nama class tanpa harus membuat instance terlebih dahulu.
-    </p>
-
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>//Nama : Marsya Dwi Lintang
-//NIM  : 251410028
-//Kelas: SI2A
-
-import 'dart:math';
-
-class MathUtils {
-  
-  // Faktorial
-  static int faktorial(int n) {
-    if (n <= 1) return 1;
-    return n * faktorial(n - 1);
-  }
-
-  // Cek bilangan prima
-  static bool isPrima(int n) {
-    if (n < 2) return false;
-    for (int i = 2; i <= sqrt(n).toInt(); i++) {
-      if (n % i == 0) return false;
-    }
-    return true;
-  }
-
-  // Pembulatan desimal
-  static double roundDouble(double value, int places) {
-    double mod = pow(10, places).toDouble();
-    return (value * mod).round() / mod;
-  }
-
-  // Random integer
-  static int randomInt(int min, int max) {
-    return min + Random().nextInt(max - min + 1);
-  }
-
-  // Random double
-  static double randomDouble(double min, double max) {
-    return min + Random().nextDouble() * (max - min);
-  }
-
-  // Rata-rata
-  static double rataRata(List<double> angka) {
-    double total = angka.reduce((a, b) => a + b);
-    return total / angka.length;
-  }
-
-  // Median
-  static double median(List<double> angka) {
-    angka.sort();
-    int n = angka.length;
-
-    if (n % 2 == 1) {
-      return angka[n ~/ 2];
+  set nama(String value) {
+    if (value.length >= 3) {
+      _nama = value;
     } else {
-      return (angka[n ~/ 2 - 1] + angka[n ~/ 2]) / 2;
+      print('Nama minimal 3 karakter');
+    }
+  }
+
+  set harga(double value) {
+    if (value > 0) {
+      _harga = value;
+    } else {
+      print('Harga harus lebih besar dari 0');
     }
   }
 }
 
 void main() {
-  print(MathUtils.faktorial(5));
-  print(MathUtils.isPrima(7));
-  print(MathUtils.roundDouble(3.14159, 2));
-  print(MathUtils.randomInt(1, 10));
-  print(MathUtils.randomDouble(1, 5));
-  print(MathUtils.rataRata([10, 20, 30]));
-  print(MathUtils.median([1, 3, 2, 4]));
+  var produk1 = Produk('Monitor Samsung', 5500.0);
+
+  print(produk1.nama);
+  print(produk1.harga);
+
+  produk1.nama = 'Keyboard Mekanik';
+  produk1.harga = 6200.0;
+
+  print(produk1.nama);
+  print(produk1.harga);
+
+  produk1.nama = 'TV';
+  produk1.harga = -100;
 }
+</pre>
 
-</code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/b9b4611d6e12c64870b150eab79f3e8e?run=true','_blank')">Run Program</button>
-  </section>
+</div>
 
-<section>
-    <h2>14. Challenge </h2>
+</div>
+<button class="btn" onclick="openPopup('https://dartpad.dev/f7092a32305dd71a0c3bc7877d161677?run=true')">Lihat DartPad</button>
+</div>
 
-    <p>
-    Kode ini memperlihatkan kombinasi abstract class dan interface dalam membuat sistem media player yang lebih terstruktur. Abstract class MediaPlayer digunakan sebagai dasar umum, sedangkan Playable dan Pausable berperan sebagai aturan perilaku yang harus diterapkan, sehingga setiap class dapat menjalankan fungsi yang sama dengan cara yang berbeda-beda.Kode ini menunjukkan penggunaan static, yaitu atribut atau fungsi yang menjadi milik class secara langsung, bukan milik objek. Karena itu, penggunaannya bisa langsung melalui nama class tanpa harus membuat instance terlebih dahulu.
-    </p>
+<div class="card">
+<h2>Praktik 2:Enkapsulasi Lengkap</h2>
+<p>Program ini membuat class User dengan field private (_username, _password, _email). 
+Data diakses menggunakan getter dan setter. Setter memiliki validasi seperti username minimal 5 karakter, password minimal 8 karakter,
+dan email harus mengandung @, sehingga data lebih aman dan terkontrol.</p>
+<div class="card">
+<div class="code-box">
 
-    <div class="code-container">
-      <div class="code-header">DART SOURCE CODE</div>
-      <pre><code>//Nama : Marsya Dwi Lintang
-//NIM  : 251410028
-//Kelas: SI2A
+<h3>DART SOURCE CODE</h3>
 
-abstract class MediaPlayer {
-  void play();
-}
+<pre>
+// Nama  : Marsya Dwi Lintang
+// NIM   : 251410028
+// Kelas : SI2A
 
-// Interface Playable
-abstract class Playable {
-  void start();
-}
+class User {
+  String _username;
+  String _password;
+  String _email;
+  
+  User(this._username, this._password, this._email);
 
-// Interface Pausable
-abstract class Pausable {
-  void pause();
-}
+  String get username => _username;
+  String get password => _password;
+  String get email => _email;
 
-// AudioPlayer
-class AudioPlayer extends MediaPlayer implements Playable, Pausable {
-  @override
-  void play() {
-    print('Memutar audio');
+  set username(String value) {
+    if (value.length >= 5) {
+      _username = value;
+    } else {
+      print("Username minimal 5 karakter");
+    }
+
   }
 
-  @override
-  void start() {
-    print('Audio dimulai');
+  set password(String value) {
+    if (value.length >= 8) {
+      _password = value;
+    } else {
+      print("Password minimal 8 karakter");
+    }
+
   }
 
-  @override
-  void pause() {
-    print('Audio dijeda');
+  set email(String value) {
+    if (value.contains("@")) {
+      _email = value;
+    } else {
+      print("Email harus mengandung '@'");
+
+    }
+
   }
+
 }
 
-// VideoPlayer
-class VideoPlayer extends MediaPlayer implements Playable, Pausable {
-  @override
-  void play() {
-    print('Memutar video');
-  }
-
-  @override
-  void start() {
-    print('Video dimulai');
-  }
-
-  @override
-  void pause() {
-    print('Video dijeda');
-  }
-}
-
-// MAIN (langsung tes semua)
 void main() {
-  List<MediaPlayer> players = [
-    AudioPlayer(),
-    VideoPlayer()
-  ];
+  var user1 = User("marsya123", "password123", "marsya@email.com");
+  print("Username: ${user1.username}");
+  print("Password: ${user1.password}");
+  print("Email: ${user1.email}");
+  print("\n--- Update Data ---");
 
-  for (var p in players) {
-    p.play();
+  user1.username = "lintanggg";
+  user1.password = "12345678";
+  user1.email = "lintang@gmail.com";
+  
+  print("Username baru: ${user1.username}");
+  print("Password baru: ${user1.password}");
+  print("Email baru: ${user1.email}");
 
-    if (p is Playable) {
-      (p as Playable).start();
+}
+</pre>
+
+</div>
+
+</div>
+<button class="btn" onclick="openPopup('https://dartpad.dev/e7f78f03419fd925fda71f1e078ab385?run=true')">Lihat DartPad</button>
+</div>
+
+<div class="card">
+<h2>8. Encapsulation (Login System)</h2>
+<p>Encapsulation adalah konsep OOP yang membungkus data dan method dalam satu class serta membatasi akses langsung ke data tersebut.</p>
+<div class="card">
+<div class="code-box">
+
+<h3>DART SOURCE CODE</h3>
+
+<pre>
+// Nama  : Marsya Dwi Lintang
+// NIM   : 251410028
+// Kelas : SI2A
+
+class User {
+  String _username;
+  String _password;
+
+  User(this._username, this._password);
+
+  String get username => _username;
+
+  bool login(String username, String password) {
+    return _username == username && _password == password;
+  }
+
+  void gantiPassword(String lama, String baru) {
+    if (_password == lama) {
+      if (baru.length >= 8) {
+        _password = baru;
+        print('Password berhasil diubah');
+      } else {
+        print('Password minimal 8 karakter');
+      }
+    } else {
+      print('Password lama salah');
     }
-
-    if (p is Pausable) {
-      (p as Pausable).pause();
-    }
-
-    print('---');
   }
 }
 
-</code></pre>
-    </div>
-    <button onclick="openModal('https://dartpad.dev/fe2a74a77c6fc85746061b65d3fd5ce0?run=true','_blank')">Run Program</button>
-  </section>
+void main() {
+  final user1 = User('admin_user', 'password0443');
 
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <iframe id="dartFrame"></iframe>
-  </div>
+  if (user1.login('admin_user', 'password0443')) {
+    print('Login berhasil');
+  }
+
+  user1.gantiPassword('password0443', 'newPassword456');
+}
+</pre>
+
+</div>
+
+</div>
+<button class="btn" onclick="openPopup('https://dartpad.dev/32a23520da0534cdb9edc41e81b2514e?run=true')">Lihat DartPad</button>
+</div>
+
+<div class="card">
+<h2>Kesimpulan</h2>
+<p>Dari praktikum ini dapat disimpulkan bahwa konsep Object Oriented Programming (OOP) dalam Dart membantu membuat program lebih terstruktur dan aman. 
+Penggunaan constructor memudahkan pembuatan objek dengan berbagai cara. Enkapsulasi digunakan untuk melindungi data dengan field private serta mengatur akses melalui getter dan setter. 
+Selain itu, pembuatan class seperti RekeningBank menunjukkan bagaimana objek dapat digunakan untuk mensimulasikan proses nyata seperti transaksi deposit, penarikan, dan pengecekan saldo dengan validasi agar data tetap aman.</p>
+</div>
+
+<div class="card">
+<h2>Bonus 3:Class Rekening Bank</h2>
+<p>Program ini membuat class RekeningBank dengan field private _nomorRekening dan _saldo.
+Class ini memiliki method deposit(), tarik(), dan cekSaldo() untuk melakukan transaksi. Program juga memiliki validasi agar saldo tidak menjadi negatif saat melakukan penarikan.</p>
+<div class="card">
+<div class="code-box">
+
+<h3>DART SOURCE CODE</h3>
+
+<pre>
+// Nama  : Marsya Dwi Lintang
+// NIM   : 251410028
+// Kelas : SI2A
+
+class RekeningBank {
+
+  String _nomorRekening;
+  double _saldo;
+
+  RekeningBank(this._nomorRekening, this._saldo);
+
+  void cekSaldo() {
+    print("Nomor Rekening: $_nomorRekening");
+    print("Saldo saat ini: Rp $_saldo");
+  }
+
+  void deposit(double jumlah) {
+    if (jumlah > 0) {
+      _saldo += jumlah;
+      print("Deposit berhasil: Rp $jumlah");
+    } else {
+      print("Jumlah deposit harus lebih dari 0");
+    }
+  }
+
+  void tarik(double jumlah) {
+    if (jumlah > 0 && jumlah <= _saldo) {
+      _saldo -= jumlah;
+      print("Penarikan berhasil: Rp $jumlah");
+    } else {
+      print("Saldo tidak cukup atau jumlah tidak valid");
+    }
+  }
+
+}
+
+void main() {
+
+  RekeningBank rekening1 = RekeningBank("123456789", 1000000);
+
+  rekening1.cekSaldo();
+  rekening1.deposit(500000);
+  rekening1.tarik(300000);
+  rekening1.cekSaldo();
+
+}
+</pre>
+
+</div>
+
+</div>
+<button class="btn" onclick="openPopup('https://dartpad.dev/fb147075a4bad2ce51bb83f6e5a75ec9?run=true')">Lihat DartPad</button>
+</div>
+  
+  
+<!-- POPUP -->
+
+<div id="popup" class="popup">
+<div class="popup-content">
+<span class="close" onclick="closePopup()">×</span>
+<iframe id="dartFrame"></iframe>
+</div>
 </div>
 
 <script>
-const sections=document.querySelectorAll("section");
-const observer=new IntersectionObserver(entries=>{
- entries.forEach(entry=>{
-   if(entry.isIntersecting){
-     entry.target.classList.add("show");
-   }
- });
-},{threshold:0.1});
-sections.forEach(sec=>observer.observe(sec));
 
-function openModal(link){
- document.getElementById("modal").style.display="block";
- document.getElementById("dartFrame").src=link;
- document.body.style.overflow="hidden";
+function openPopup(link){
+document.getElementById("popup").style.display="flex";
+document.getElementById("dartFrame").src=link;
 }
 
-function closeModal(){
- document.getElementById("modal").style.display="none";
- document.getElementById("dartFrame").src="";
- document.body.style.overflow="auto";
+function closePopup(){
+document.getElementById("popup").style.display="none";
+document.getElementById("dartFrame").src="";
 }
 
-window.onclick=function(e){
- if(e.target==document.getElementById("modal")) closeModal();
-}
 </script>
 
 </body>
 </html>
+ 
